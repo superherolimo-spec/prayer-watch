@@ -19,5 +19,5 @@ export const PATTERN_STORAGE_KEY = "masjid-pattern";
 
 export function applyTheme(theme: ThemeId) {
   if (typeof document === "undefined") return;
-  document.documentElement.dataset.theme = theme;
+  document.documentElement.dataset["theme"] = theme;
 }
