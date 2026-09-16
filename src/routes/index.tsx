@@ -261,6 +261,8 @@ function Home() {
           </p>
         </header>
 
+        {iqamahAlert && <SilentBanner alert={iqamahAlert} />}
+
         {settings.announcement_visible && settings.announcement.trim() && (
           <div className="rounded-2xl border border-gold/40 bg-gold/10 px-5 py-4 text-center text-base text-gold-soft xl:text-xl">
             {settings.announcement}
