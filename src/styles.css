@@ -152,3 +152,48 @@
     color: var(--color-foreground);
   }
 }
+
+@theme inline {
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-emerald-deep: var(--emerald-deep);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-arabic: var(--font-arabic);
+}
+
+@layer base {
+  body {
+    font-family: var(--font-body);
+    background-image:
+      radial-gradient(ellipse at 15% -10%, oklch(0.38 0.07 168 / 45%), transparent 55%),
+      radial-gradient(ellipse at 90% 0%, oklch(0.5 0.09 90 / 14%), transparent 50%);
+    background-attachment: fixed;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+  }
+}
+
+@utility pattern-geometric {
+  background-image:
+    repeating-linear-gradient(45deg, oklch(0.8 0.12 86 / 6%) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(-45deg, oklch(0.8 0.12 86 / 6%) 0 1px, transparent 1px 22px);
+}
+
+@utility text-arabic {
+  font-family: var(--font-arabic);
+  direction: rtl;
+  line-height: 2;
+}
+
+@utility shadow-elegant {
+  box-shadow: var(--shadow-elegant);
+}
+
+@utility ring-gold {
+  box-shadow: var(--shadow-gold);
+}
