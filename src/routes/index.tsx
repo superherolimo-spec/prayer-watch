@@ -122,6 +122,39 @@ function Home() {
   const status = now && prayers.length ? computeStatus(prayers, now) : null;
   const next = status ? prayers[status.nextIndex] : undefined;
 
+  const defaults = settings as unknown as { default_theme?: string; show_pattern?: boolean } | null;
+  const [theme, setTheme] = useState<ThemeId>("emerald");
+  const [pattern, setPattern] = useState(true);
+
+  useEffect(() => {
+    const stored = localStorage.getItem(THEME_STORAGE_KEY);
+    const initial: ThemeId = isThemeId(stored)
+      ? stored
+      : isThemeId(defaults?.default_theme)
+        ? defaults!.default_theme
+        : "emerald";
+    setTheme(initial);
+    applyTheme(initial);
+
+    const storedPattern = localStorage.getItem(PATTERN_STORAGE_KEY);
+    setPattern(storedPattern === null ? (defaults?.show_pattern ?? true) : storedPattern === "1");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaults?.default_theme, defaults?.show_pattern]);
+
+  const changeTheme = useCallback((t: ThemeId) => {
+    setTheme(t);
+    applyTheme(t);
+    localStorage.setItem(THEME_STORAGE_KEY, t);
+  }, []);
+
+  const changePattern = useCallback((value: boolean) => {
+    setPattern(value);
+    localStorage.setItem(PATTERN_STORAGE_KEY, value ? "1" : "0");
+  }, []);
+
+  const iqamahAlert = now && prayers.length ? upcomingIqamah(prayers, now) : null;
+  const nafl = settings && now ? naflStatus(settings, now) : null;
+
   useEffect(() => {
     if (!soundOn || !status || !next || !now) return;
     if (status.secondsToNext > 1) return;
