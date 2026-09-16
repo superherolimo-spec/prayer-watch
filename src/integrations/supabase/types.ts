@@ -38,6 +38,7 @@ export type Database = {
           announcement_visible: boolean
           asr_adhan: string
           asr_iqamah: string
+          default_theme: string
           dhuhr_adhan: string
           dhuhr_iqamah: string
           fajr_adhan: string
@@ -50,6 +51,8 @@ export type Database = {
           maghrib_adhan: string
           maghrib_iqamah: string
           masjid_name: string
+          show_pattern: boolean
+          shurooq: string
           updated_at: string
         }
         Insert: {
@@ -57,6 +60,7 @@ export type Database = {
           announcement_visible?: boolean
           asr_adhan?: string
           asr_iqamah?: string
+          default_theme?: string
           dhuhr_adhan?: string
           dhuhr_iqamah?: string
           fajr_adhan?: string
@@ -69,6 +73,8 @@ export type Database = {
           maghrib_adhan?: string
           maghrib_iqamah?: string
           masjid_name?: string
+          show_pattern?: boolean
+          shurooq?: string
           updated_at?: string
         }
         Update: {
@@ -76,6 +82,7 @@ export type Database = {
           announcement_visible?: boolean
           asr_adhan?: string
           asr_iqamah?: string
+          default_theme?: string
           dhuhr_adhan?: string
           dhuhr_iqamah?: string
           fajr_adhan?: string
@@ -88,6 +95,8 @@ export type Database = {
           maghrib_adhan?: string
           maghrib_iqamah?: string
           masjid_name?: string
+          show_pattern?: boolean
+          shurooq?: string
           updated_at?: string
         }
         Relationships: []
