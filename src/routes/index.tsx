@@ -353,6 +353,12 @@ function Home() {
           <RemindersCard reminders={data.reminders} />
         </section>
 
+        <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
+          {nafl ? <NaflBadge status={nafl} /> : <div />}
+          <TasbihWidget />
+        </section>
+
+
         <footer className="flex flex-wrap items-center justify-center gap-3 pb-6">
           <Button variant="secondary" onClick={() => setSoundOn((s) => !s)}>
             {soundOn ? <Bell className="size-4" /> : <BellOff className="size-4" />}
