@@ -120,9 +120,9 @@ function Home() {
 
   const handleNameTap = useCallback(() => {
     const t = Date.now();
-    taps.current = [...taps.current.filter((x) => t - x < 2000), t];
+    taps.current = [...taps.current.filter((x) => t - x < 4000), t];
     setTapPulse(true);
-    setTimeout(() => setTapPulse(false), 220);
+    setTimeout(() => setTapPulse(false), 140);
     if (typeof navigator !== "undefined" && "vibrate" in navigator) navigator.vibrate?.(12);
     if (taps.current.length >= 5) {
       taps.current = [];
