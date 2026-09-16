@@ -91,3 +91,80 @@ export function hijriDate(date: Date): string {
     return "";
   }
 }
+
+/* ---------- Iqamah alert ---------- */
+
+export type IqamahAlert = { name: string; minutes: number; seconds: number };
+
+/** Returns the upcoming iqamah within `windowMinutes`, if any. */
+export function upcomingIqamah(
+  prayers: PrayerEntry[],
+  now: Date,
+  windowMinutes = 10,
+): IqamahAlert | null {
+  const nowSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+  for (const p of prayers) {
+    const at = toMinutes(p.iqamah) * 60;
+    const diff = at - nowSec;
+    if (diff > 0 && diff <= windowMinutes * 60) {
+      return { name: p.name, minutes: Math.ceil(diff / 60), seconds: diff };
+    }
+  }
+  return null;
+}
+
+/* ---------- Forbidden (makrooh) prayer times ---------- */
+
+export type NaflStatus = {
+  allowed: boolean;
+  label: string;
+  detail: string;
+  endsIn?: number;
+};
+
+type Window = { start: number; end: number; label: string; detail: string };
+
+export function naflWindows(s: PrayerSettings): Window[] {
+  const shurooq = toMinutes((s as unknown as { shurooq?: string }).shurooq ?? "06:30");
+  const dhuhr = toMinutes(s.dhuhr_adhan);
+  const maghrib = toMinutes(s.maghrib_adhan);
+  return [
+    {
+      start: shurooq,
+      end: shurooq + 15,
+      label: "Sunrise (Shurooq)",
+      detail: "Nafl is withheld until the sun has fully risen.",
+    },
+    {
+      start: dhuhr - 10,
+      end: dhuhr,
+      label: "Zenith (Istiwa)",
+      detail: "The sun is at its peak — wait until Dhuhr enters.",
+    },
+    {
+      start: maghrib - 12,
+      end: maghrib,
+      label: "Sunset (Ghurub)",
+      detail: "Nafl is withheld as the sun sets, until Maghrib.",
+    },
+  ];
+}
+
+export function naflStatus(s: PrayerSettings, now: Date): NaflStatus {
+  const mins = now.getHours() * 60 + now.getMinutes();
+  for (const w of naflWindows(s)) {
+    if (mins >= w.start && mins < w.end) {
+      return {
+        allowed: false,
+        label: w.label,
+        detail: w.detail,
+        endsIn: w.end - mins,
+      };
+    }
+  }
+  return {
+    allowed: true,
+    label: "Nafl permitted",
+    detail: "Voluntary prayer may be offered at this time.",
+  };
+}

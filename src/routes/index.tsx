@@ -11,10 +11,23 @@ import {
   formatCountdown,
   formatTime,
   hijriDate,
+  naflStatus,
+  upcomingIqamah,
 } from "@/lib/prayer-times";
 import { ProgressRing } from "@/components/masjid/ProgressRing";
 import { RemindersCard } from "@/components/masjid/RemindersCard";
 import { AdminDialog } from "@/components/masjid/AdminDialog";
+import { ThemePicker } from "@/components/masjid/ThemePicker";
+import { SilentBanner } from "@/components/masjid/SilentBanner";
+import { NaflBadge } from "@/components/masjid/NaflBadge";
+import { TasbihWidget } from "@/components/masjid/TasbihWidget";
+import {
+  applyTheme,
+  isThemeId,
+  PATTERN_STORAGE_KEY,
+  THEME_STORAGE_KEY,
+  type ThemeId,
+} from "@/lib/themes";
 import { Button } from "@/components/ui/button";
 
 const masjidQuery = queryOptions({
@@ -109,6 +122,36 @@ function Home() {
   const status = now && prayers.length ? computeStatus(prayers, now) : null;
   const next = status ? prayers[status.nextIndex] : undefined;
 
+  const defaults = settings as unknown as { default_theme?: string; show_pattern?: boolean } | null;
+  const [theme, setTheme] = useState<ThemeId>("emerald");
+  const [pattern, setPattern] = useState(true);
+
+  useEffect(() => {
+    const stored = localStorage.getItem(THEME_STORAGE_KEY);
+    const fallback = defaults?.default_theme;
+    const initial: ThemeId = isThemeId(stored) ? stored : isThemeId(fallback) ? fallback : "emerald";
+    setTheme(initial);
+    applyTheme(initial);
+
+    const storedPattern = localStorage.getItem(PATTERN_STORAGE_KEY);
+    setPattern(storedPattern === null ? (defaults?.show_pattern ?? true) : storedPattern === "1");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaults?.default_theme, defaults?.show_pattern]);
+
+  const changeTheme = useCallback((t: ThemeId) => {
+    setTheme(t);
+    applyTheme(t);
+    localStorage.setItem(THEME_STORAGE_KEY, t);
+  }, []);
+
+  const changePattern = useCallback((value: boolean) => {
+    setPattern(value);
+    localStorage.setItem(PATTERN_STORAGE_KEY, value ? "1" : "0");
+  }, []);
+
+  const iqamahAlert = now && prayers.length ? upcomingIqamah(prayers, now) : null;
+  const nafl = settings && now ? naflStatus(settings, now) : null;
+
   useEffect(() => {
     if (!soundOn || !status || !next || !now) return;
     if (status.secondsToNext > 1) return;
@@ -183,9 +226,19 @@ function Home() {
 
   return (
     <main className={kiosk ? "min-h-screen px-4 py-6 sm:px-8" : "min-h-screen px-4 py-8 sm:px-8"}>
-      <div className="pattern-geometric pointer-events-none fixed inset-0 -z-10 opacity-40" aria-hidden />
+      {pattern && (
+        <div className="pattern-geometric pointer-events-none fixed inset-0 -z-10 opacity-40" aria-hidden />
+      )}
 
       <div className="mx-auto w-full max-w-[1600px] space-y-8">
+        <div className="flex justify-end">
+          <ThemePicker
+            theme={theme}
+            onThemeChange={changeTheme}
+            pattern={pattern}
+            onPatternChange={changePattern}
+          />
+        </div>
         <header className="flex flex-col items-center gap-3 text-center">
           <button
             onClick={handleNameTap}
@@ -207,6 +260,8 @@ function Home() {
             {now ? ` · ${hijriDate(now)}` : ""}
           </p>
         </header>
+
+        {iqamahAlert && <SilentBanner alert={iqamahAlert} />}
 
         {settings.announcement_visible && settings.announcement.trim() && (
           <div className="rounded-2xl border border-gold/40 bg-gold/10 px-5 py-4 text-center text-base text-gold-soft xl:text-xl">
@@ -297,6 +352,12 @@ function Home() {
 
           <RemindersCard reminders={data.reminders} />
         </section>
+
+        <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
+          {nafl ? <NaflBadge status={nafl} /> : <div />}
+          <TasbihWidget />
+        </section>
+
 
         <footer className="flex flex-wrap items-center justify-center gap-3 pb-6">
           <Button variant="secondary" onClick={() => setSoundOn((s) => !s)}>

@@ -62,6 +62,9 @@ type SettingsUpdate = {
   jummah_salah: string;
   announcement: string;
   announcement_visible: boolean;
+  shurooq: string;
+  default_theme: string;
+  show_pattern: boolean;
 };
 
 export const saveSettings = createServerFn({ method: "POST" })
