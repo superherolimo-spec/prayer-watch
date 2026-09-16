@@ -11,10 +11,23 @@ import {
   formatCountdown,
   formatTime,
   hijriDate,
+  naflStatus,
+  upcomingIqamah,
 } from "@/lib/prayer-times";
 import { ProgressRing } from "@/components/masjid/ProgressRing";
 import { RemindersCard } from "@/components/masjid/RemindersCard";
 import { AdminDialog } from "@/components/masjid/AdminDialog";
+import { ThemePicker } from "@/components/masjid/ThemePicker";
+import { SilentBanner } from "@/components/masjid/SilentBanner";
+import { NaflBadge } from "@/components/masjid/NaflBadge";
+import { TasbihWidget } from "@/components/masjid/TasbihWidget";
+import {
+  applyTheme,
+  isThemeId,
+  PATTERN_STORAGE_KEY,
+  THEME_STORAGE_KEY,
+  type ThemeId,
+} from "@/lib/themes";
 import { Button } from "@/components/ui/button";
 
 const masjidQuery = queryOptions({
