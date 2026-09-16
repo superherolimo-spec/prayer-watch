@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { verifyPin, saveSettings, type PrayerSettings } from "@/lib/masjid.functions";
+import { THEMES } from "@/lib/themes";
 
 type Props = {
   open: boolean;
@@ -215,6 +216,43 @@ export function AdminDialog({ open, onOpenChange, settings, onSaved }: Props) {
                     onChange={(e) => set("jummah_salah", e.target.value)}
                   />
                 </div>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <p className="text-sm font-medium text-gold">Display</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="shurooq">Sunrise (Shurooq)</Label>
+                  <Input
+                    id="shurooq"
+                    type="time"
+                    value={values.shurooq}
+                    onChange={(e) => set("shurooq", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="theme">Default theme (TV / kiosk)</Label>
+                  <select
+                    id="theme"
+                    value={values.default_theme}
+                    onChange={(e) => set("default_theme", e.target.value)}
+                    className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm"
+                  >
+                    {THEMES.map((t) => (
+                      <option key={t.id} value={t.id} className="bg-popover text-popover-foreground">
+                        {t.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="flex items-center justify-between rounded-lg border border-border px-3 py-2">
+                <span className="text-sm">Geometric background overlay</span>
+                <Switch
+                  checked={values.show_pattern}
+                  onCheckedChange={(v) => set("show_pattern", v)}
+                />
               </div>
             </div>
 
