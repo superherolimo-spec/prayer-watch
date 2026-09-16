@@ -128,11 +128,8 @@ function Home() {
 
   useEffect(() => {
     const stored = localStorage.getItem(THEME_STORAGE_KEY);
-    const initial: ThemeId = isThemeId(stored)
-      ? stored
-      : isThemeId(defaults?.default_theme)
-        ? defaults!.default_theme
-        : "emerald";
+    const fallback = defaults?.default_theme;
+    const initial: ThemeId = isThemeId(stored) ? stored : isThemeId(fallback) ? fallback : "emerald";
     setTheme(initial);
     applyTheme(initial);
 
