@@ -14,7 +14,114 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      admin_secret: {
+        Row: {
+          id: string
+          pin: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          pin: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          pin?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      prayer_settings: {
+        Row: {
+          announcement: string
+          announcement_visible: boolean
+          asr_adhan: string
+          asr_iqamah: string
+          dhuhr_adhan: string
+          dhuhr_iqamah: string
+          fajr_adhan: string
+          fajr_iqamah: string
+          id: string
+          isha_adhan: string
+          isha_iqamah: string
+          jummah_khutbah: string
+          jummah_salah: string
+          maghrib_adhan: string
+          maghrib_iqamah: string
+          masjid_name: string
+          updated_at: string
+        }
+        Insert: {
+          announcement?: string
+          announcement_visible?: boolean
+          asr_adhan?: string
+          asr_iqamah?: string
+          dhuhr_adhan?: string
+          dhuhr_iqamah?: string
+          fajr_adhan?: string
+          fajr_iqamah?: string
+          id?: string
+          isha_adhan?: string
+          isha_iqamah?: string
+          jummah_khutbah?: string
+          jummah_salah?: string
+          maghrib_adhan?: string
+          maghrib_iqamah?: string
+          masjid_name?: string
+          updated_at?: string
+        }
+        Update: {
+          announcement?: string
+          announcement_visible?: boolean
+          asr_adhan?: string
+          asr_iqamah?: string
+          dhuhr_adhan?: string
+          dhuhr_iqamah?: string
+          fajr_adhan?: string
+          fajr_iqamah?: string
+          id?: string
+          isha_adhan?: string
+          isha_iqamah?: string
+          jummah_khutbah?: string
+          jummah_salah?: string
+          maghrib_adhan?: string
+          maghrib_iqamah?: string
+          masjid_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      reminders: {
+        Row: {
+          active: boolean
+          arabic: string
+          created_at: string
+          id: string
+          reference: string
+          sort_order: number
+          translation: string
+        }
+        Insert: {
+          active?: boolean
+          arabic: string
+          created_at?: string
+          id?: string
+          reference: string
+          sort_order?: number
+          translation: string
+        }
+        Update: {
+          active?: boolean
+          arabic?: string
+          created_at?: string
+          id?: string
+          reference?: string
+          sort_order?: number
+          translation?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
