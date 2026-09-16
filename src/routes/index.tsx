@@ -226,9 +226,19 @@ function Home() {
 
   return (
     <main className={kiosk ? "min-h-screen px-4 py-6 sm:px-8" : "min-h-screen px-4 py-8 sm:px-8"}>
-      <div className="pattern-geometric pointer-events-none fixed inset-0 -z-10 opacity-40" aria-hidden />
+      {pattern && (
+        <div className="pattern-geometric pointer-events-none fixed inset-0 -z-10 opacity-40" aria-hidden />
+      )}
 
       <div className="mx-auto w-full max-w-[1600px] space-y-8">
+        <div className="flex justify-end">
+          <ThemePicker
+            theme={theme}
+            onThemeChange={changeTheme}
+            pattern={pattern}
+            onPatternChange={changePattern}
+          />
+        </div>
         <header className="flex flex-col items-center gap-3 text-center">
           <button
             onClick={handleNameTap}
