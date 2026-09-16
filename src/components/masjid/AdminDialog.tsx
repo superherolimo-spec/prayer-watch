@@ -32,10 +32,17 @@ type FormValues = {
   jummah_salah: string;
   announcement: string;
   announcement_visible: boolean;
+  shurooq: string;
+  default_theme: string;
+  show_pattern: boolean;
 };
 
 function toForm(s: PrayerSettings): FormValues {
+  const extra = s as unknown as { shurooq?: string; default_theme?: string; show_pattern?: boolean };
   return {
+    shurooq: extra.shurooq ?? "06:30",
+    default_theme: extra.default_theme ?? "emerald",
+    show_pattern: extra.show_pattern ?? true,
     masjid_name: s.masjid_name,
     fajr_adhan: s.fajr_adhan,
     fajr_iqamah: s.fajr_iqamah,
